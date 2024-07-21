@@ -12,21 +12,33 @@ Camera::~Camera(){
 }
 
 void Camera::updateViewMatrix(){
-  cameraPos = DirectX::XMVectorSet(pos.x,pos.y,pos.z,0.0f);
   rotationMatrix = DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll);
+  cameraPos = DirectX::XMVectorSet(pos.x,pos.y,pos.z,0.0f);
+  cameraPos = DirectX::XMVector3TransformCoord(cameraPos, rotationMatrix);
   DirectX::XMVECTOR cameraTarget = DirectX::XMVector3TransformCoord(forwardVector, rotationMatrix);
   cameraTarget = DirectX::XMVectorAdd(cameraTarget, cameraPos);
   viewMatrix =  DirectX::XMMatrixLookAtLH(
     cameraPos,
     cameraTarget,
     DirectX::XMVector3TransformCoord(upVector, rotationMatrix));
-    
+}
 
+void Camera::test(float x, float y){
+  yaw += x;
+  pitch += y;
+  updateViewMatrix();
 }
 
 void Camera::initProjectionMatrix(float windowH, float windowW){
   aspectRatio = windowW/windowH;
   projectionMatrix = DirectX::XMMatrixPerspectiveFovLH(fov, aspectRatio, nearZ, farZ);
+}
+
+void Camera::updateRotation(f32 yaw, f32 pitch){
+  
+  this->yaw += yaw * 0.001;
+  this->pitch += pitch * 0.001;
+  updateViewMatrix();
 }
 
 void Camera::setCameraPos(f32 x, f32 y, f32 z, f32 direction){
