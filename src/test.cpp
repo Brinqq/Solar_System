@@ -59,8 +59,8 @@ void updateTransform(float speed){
   angleo += speed;
   transform = {
     DirectX::XMMatrixTranspose(
-      DirectX::XMMatrixRotationY(angleo)*
-      DirectX::XMMatrixRotationZ(angleo)*
+      // DirectX::XMMatrixRotationY(angleo)*
+      // DirectX::XMMatrixRotationZ(angleo)*
       DirectX::XMMatrixTranslation(0,0, 2) * camera.viewMatrix * camera.projectionMatrix
     )
   };
@@ -98,10 +98,10 @@ void start(){
   u32 a = direct3d.newRenderObject(mesh);
   u32 skyboxId = direct3d.newRenderObject(skybox);
   while(!window.getWindowStatus()){
-    Input::update();
     updateTransform(0.01);
     direct3d.test(transform.transform);
     window.update();
+    Input::update();
     direct3d.testUpdate();
    }
 }

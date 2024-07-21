@@ -55,7 +55,9 @@ int Window::getWindowStatus(){
 void Window::update(){
   fpsCounterUpdate();
   glfwPollEvents();
-  m_inputHandler.update();
+  double x = 0, y = 0;
+  glfwGetCursorPos(m_windowInstance, &x, &y);
+  Input::changeMousePos(x, y);
 }
 
 void Window::throwErrorBox(char* pString) noexcept{

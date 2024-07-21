@@ -10,6 +10,22 @@ void Input::closeWindow(){
   pWindow->closeWindow();
 }
 
+void Input::unlockCursor(){
+  
+}
+
+void Input::changeMousePos(double x, double y){
+  mouseXMoveDistance = x - lastFrameMousePosX;
+  mouseYMoveDistance = y - lastFrameMousePosY;
+    if(y != lastFrameMousePosY || x != lastFrameMousePosX){
+      mouseMoved = true;
+    }else{mouseMoved = false;}
+  
+  lastFrameMousePosX = x;
+  lastFrameMousePosY = y;
+  
+}
+
 void InputHandler::init(Direct3D* d3d){
 Input::pDirect3d = d3d;
 }

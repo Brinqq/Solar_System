@@ -18,6 +18,12 @@ namespace Input {
   constexpr float cameraMove = 0.01;
   constexpr float posOrNeg = 1;
 
+  inline double lastFrameMousePosX = 0;
+  inline double lastFrameMousePosY = 0;
+  inline double mouseXMoveDistance;
+  inline double mouseYMoveDistance;
+  inline bool mouseMoved = false;
+
   inline bool A_KEY_DOWN = false;
   inline bool D_KEY_DOWN =false;
   inline bool S_KEY_DOWN = false;
@@ -26,20 +32,31 @@ namespace Input {
 
   inline void update(){
     if(W_KEY_DOWN == true){
-      pCamera->setCameraPos(0.0f, 0.0f, cameraMove, -posOrNeg);
+      pCamera->setCameraPos(0.0f, 0.0f, cameraMove, posOrNeg);
     }
 
     if(S_KEY_DOWN == true){
-      pCamera->setCameraPos(0.0f, 0.0f, cameraMove, posOrNeg);
+      pCamera->setCameraPos(0.0f, 0.0f, cameraMove, -posOrNeg);
     }
+
     if(D_KEY_DOWN == true){
-      pCamera->setCameraPos(cameraMove, 0.0f, 0.0f, -posOrNeg);
-    }
-    if(A_KEY_DOWN == true){
       pCamera->setCameraPos(cameraMove, 0.0f, 0.0f, posOrNeg);
     }
+
+    if(A_KEY_DOWN == true){
+      pCamera->setCameraPos(cameraMove, 0.0f, 0.0f, -posOrNeg);
+    }
+    
+    if(mouseMoved){
+      pCamera->updateRotation((float)mouseXMoveDistance, (float)mouseYMoveDistance);
+    }
   }
+  
+
   void closeWindow();
+  void unlockCursor();
+  void changeMousePos(double x, double y);
+
   static void inputKeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods){
     if(key == GLFW_KEY_Z && action == GLFW_PRESS){
       pDirect3d->switchRasterizerState(RS_WIREFRAME);
@@ -47,6 +64,15 @@ namespace Input {
 
     if(key == GLFW_KEY_X && action == GLFW_PRESS){
       pDirect3d->switchRasterizerState(RS_DEFAULT);
+    }
+
+    if(key == GLFW_KEY_Q && action == GLFW_PRESS){
+      pCamera->test(0.07f,0.0f);
+    }
+
+    if(key == GLFW_KEY_E && action == GLFW_PRESS){
+    pCamera->test(-0.07f, 0.0f);
+
     }
 
     if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
